@@ -16,10 +16,14 @@ type Place = {
   };
 };
 
-export default function MapSearch() {
+type props = {
+  onLocationSelect: (placeId: string) => void;
+};
+
+export default function MapSearch({ onLocationSelect }: props) {
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const [places, setPlaces] = useState<Place[]>([]);
+  const [places, setPlaces] = useState<Place[]>([]); // places is used primarily for debugging
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -27,6 +31,7 @@ export default function MapSearch() {
     e.preventDefault();
     setQuery(searchInput); // triggers useEffect
   };
+
   useEffect(() => {
     if (!query) return;
 
@@ -48,6 +53,8 @@ export default function MapSearch() {
         const data = await response.json();
 
         setPlaces(data.results);
+        onLocationSelect(data.results[0].place_id);
+        // For simplicity, select the first location in the array of possible matches
       } catch (err: unknown) {
         if (err instanceof Error) setError(err.message);
       } finally {
@@ -56,7 +63,7 @@ export default function MapSearch() {
     }
 
     fetchPlaces();
-  }, [query]);
+  }, [query, onLocationSelect]);
   return (
     <div>
       <h1>Type a Location</h1>
@@ -68,16 +75,16 @@ export default function MapSearch() {
         />
         <button type="submit">Search</button>
       </form>
-
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-
       {/* Used for debugging */}
-      <ul>
+      {/* <ul>
         {places.map((place) => (
-          <li key={place.place_id}>{place.formatted_address}</li>
+          <li key={place.place_id}>
+            {place.formatted_address}
+          </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }

@@ -1,10 +1,19 @@
-import MapSearch from "./components/MapSearch";
 import "./App.css";
+import MapSearch from "./components/MapSearch";
+import MapResult from "./components/MapResult";
+import { useState } from "react";
 
 function App() {
+  const [placeId, setPlaceId] = useState<string | null>(null);
+
   return (
     <>
-      <MapSearch></MapSearch>
+      <MapSearch onLocationSelect={setPlaceId}></MapSearch>
+      {placeId && (
+        <>
+          <MapResult placeId={placeId}></MapResult>
+        </>
+      )}
     </>
   );
 }
