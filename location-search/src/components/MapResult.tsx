@@ -1,8 +1,8 @@
-type props = {
+type Props = {
   placeId: string;
 };
 
-export default function MapResult({ placeId }: props) {
+export default function MapResult({ placeId }: Props) {
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_KEY;
 
   const link =

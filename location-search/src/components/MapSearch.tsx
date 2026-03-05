@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type Place = {
   place_id: string;
@@ -14,22 +15,29 @@ type Place = {
       lng: number;
     };
   };
+  types: string[];
 };
 
-type props = {
+type Props = {
   onLocationSelect: (placeId: string) => void;
 };
 
-export default function MapSearch({ onLocationSelect }: props) {
+export default function MapSearch({ onLocationSelect }: Props) {
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const [places, setPlaces] = useState<Place[]>([]); // places is used primarily for debugging
+  const [places, setPlaces] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setQuery(searchInput); // triggers useEffect
+  };
+
+  const handleNavigate = (place: Place) => {
+    navigate("/details", { state: { place } });
   };
 
   useEffect(() => {
@@ -77,14 +85,19 @@ export default function MapSearch({ onLocationSelect }: props) {
       </form>
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
-      {/* Used for debugging */}
-      {/* <ul>
+
+      {places.length != 0 && (
+        <label htmlFor="locations">Possible location(s):</label>
+      )}
+
+      <ul id="locations">
         {places.map((place) => (
           <li key={place.place_id}>
-            {place.formatted_address}
+            {place.formatted_address}{" "}
+            <a onClick={() => handleNavigate(place)}>Want More Info?</a>
           </li>
         ))}
-      </ul> */}
+      </ul>
     </div>
   );
 }

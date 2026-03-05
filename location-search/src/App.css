@@ -44,3 +44,15 @@
 input {
     margin: 2em;
 }
+
+ul {
+    text-align: left;
+}
+
+iframe {
+    margin: 2em;
+}
+
+#locations {
+    list-style-type: none;
+}

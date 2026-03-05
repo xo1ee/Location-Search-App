@@ -1,20 +1,14 @@
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import MapSearch from "./components/MapSearch";
-import MapResult from "./components/MapResult";
-import { useState } from "react";
+import Home from "./pages/Home";
+import PlaceDetails from "./components/PlaceDetails";
 
 function App() {
-  const [placeId, setPlaceId] = useState<string | null>(null);
-
   return (
-    <>
-      <MapSearch onLocationSelect={setPlaceId}></MapSearch>
-      {placeId && (
-        <>
-          <MapResult placeId={placeId}></MapResult>
-        </>
-      )}
-    </>
+    <Routes>
+      <Route path="/" element={<Home />}></Route>
+      <Route path="/details" element={<PlaceDetails />} />
+    </Routes>
   );
 }
 
